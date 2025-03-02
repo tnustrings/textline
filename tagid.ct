@@ -293,3 +293,6 @@ if lang == "en" {
 }
 >>
 
+
+
+make text bold like here? https://www.reddit.com/r/golang/comments/tjnyfs/simple_cli_colorizing_in_go/
