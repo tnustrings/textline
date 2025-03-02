@@ -4,6 +4,9 @@
 package main
 
 <<import>>
+
+<<embed>>
+
 <<hello>>
 <<main>>
 <<tagid>>
@@ -31,6 +34,17 @@ import fmt.
 import "fmt"
 >>
 
+embed the json dict files in the binary.
+
+<</embed
+//go:embed dict/*
+var dictfolder embed.FS
+>>
+
+<</import
+import "embed"
+>>
+
 <</main
 // main runs Hello.
 func main() {
@@ -48,7 +62,8 @@ read the dict for the lang.
 
 <<
 dict := make(map[string]interface{})
-json.Unmarshal(Cat("dict/lingo-dict-" + langa + ".json"), &dict)
+content, _ := dictfolder.ReadFile("dict/lingo-dict-" + langa + ".json")
+json.Unmarshal(content, &dict)
 >>
 
 output the text with word by word translations.

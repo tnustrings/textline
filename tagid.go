@@ -1,11 +1,18 @@
 package main
 
 import "fmt"
+import "embed"
 import "os"
 import "encoding/json"
 import "io"
 import "regexp"
 import "strings"
+
+
+
+//go:embed dict/*
+var dictfolder embed.FS
+
 
 
 func Hello() string {
@@ -18,7 +25,8 @@ func Hello() string {
 func main() {
   langa := os.Args[1]
   dict := make(map[string]interface{})
-  json.Unmarshal(Cat("dict/lingo-dict-" + langa + ".json"), &dict)
+  content, _ := dictfolder.ReadFile("dict/lingo-dict-" + langa + ".json")
+  json.Unmarshal(content, &dict)
   fmt.Println(Tagid(string(CatStdin()), langa, dict))
   
 
