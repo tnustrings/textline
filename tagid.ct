@@ -71,7 +71,7 @@ set the lang.
 output the text with word by word translations.
 
 <<
-  fmt.Print(Tagid(string(bytes), langa, dict))
+  fmt.Println(Tagid(string(bytes), langa, dict))
   //fmt.Println(dict["de"].(map[string]interface{})["hallo"])
 >>
 
@@ -177,13 +177,26 @@ import "strings"
 <</words-and-between
 // WordsAndBetween splits the text into words and non-words
 func WordsAndBetween(s string)[]string {
-  re := regexp.MustCompile(`[^\p{L}\p{M}]+`)
-  return SplitKeepSep(re, s)
-  // return strings.Split(s, " ")
+  <<.>>
 }
 >>
 
-split with keeping delimiter.
+the intuitive way would be to split along the non-letters between
+words: [^\p{L}\p{M}]+
+
+however, this would split up words containing apostrophes like "don't"
+into "don", "'", "t".  we don't want this.
+
+so we split along the words, that means, groups of letters possibly
+containing an apostrophe, but not beginnig or ending with one:
+[\p{L}\p{M}]+'?[\p{L}\p{M}]
+
+<<
+  re := regexp.MustCompile(`[\p{L}\p{M}]+'?[\p{L}\p{M}]+`)
+  return SplitKeepSep(re, s)
+>>
+
+split with keeping the delimiter.
 
 <</split-keep
 func SplitKeepSep(re *regexp.Regexp, s string) []string {

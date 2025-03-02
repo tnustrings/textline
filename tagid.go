@@ -29,7 +29,7 @@ func main() {
   json.Unmarshal([]byte(bytes), &dict)
   bytes, _ = io.ReadAll(os.Stdin)
   langa := os.Args[1]
-  fmt.Print(Tagid(string(bytes), langa, dict))
+  fmt.Println(Tagid(string(bytes), langa, dict))
   //fmt.Println(dict["de"].(map[string]interface{})["hallo"])
 
 
@@ -61,9 +61,8 @@ func Tagid(text string, langa string, dict map[string]interface{}) string {
 
 // WordsAndBetween splits the text into words and non-words
 func WordsAndBetween(s string)[]string {
-  re := regexp.MustCompile(`[^\p{L}\p{M}]+`)
+  re := regexp.MustCompile(`[\p{L}\p{M}]+'?[\p{L}\p{M}]+`)
   return SplitKeepSep(re, s)
-  // return strings.Split(s, " ")
 }
 
 
