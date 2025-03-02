@@ -11,6 +11,9 @@ package main
 <<lookup>>
 
 <<split-keep>>
+
+<<cat>>
+<<dict-copy>>
 >>
 
 hello returns a greeting.
@@ -35,44 +38,23 @@ func main() {
 }
 >>
 
-open the dict file
-
-<<
-  gtdictfile := "gt-scrape-dict.json"
-
-  file, err := os.Open(gtdictfile)
-  if err != nil {
-    fmt.Println(err)
-  }
-  defer file.Close()
->>
-
-unmarshal the json
-
-<<
-  bytes, _ := io.ReadAll(file)
-
-  var dict map[string]interface{}
-  json.Unmarshal([]byte(bytes), &dict)
->>
-
-read the text.
-
-<<
-  bytes, _ = io.ReadAll(os.Stdin)
->>
-
 set the lang.
 
 <<
-  langa := os.Args[1]
+langa := os.Args[1]
+>>
+
+read the dict for the lang.
+
+<<
+dict := make(map[string]interface{})
+json.Unmarshal(Cat("/home/max/zebra/out/lingo-dict-" + langa + ".json"), &dict)
 >>
 
 output the text with word by word translations.
 
 <<
-  fmt.Println(Tagid(string(bytes), langa, dict))
-  //fmt.Println(dict["de"].(map[string]interface{})["hallo"])
+fmt.Println(Tagid(string(CatStdin()), langa, dict))
 >>
 
 do the imports.
@@ -230,5 +212,69 @@ if start < len(s) {
   out = append(out, s[start:len(s)-1])
 }
 return out
+>>
+
+## helper functions
+
+<</cat
+// Cat returns the contents of a file as byte array
+func Cat(path string) []byte {
+  file, err := os.Open(path)
+  if err != nil {
+    fmt.Println(err)
+  }
+  defer file.Close()
+
+  bytes, _ := io.ReadAll(file)
+
+  return bytes
+}
+
+// CatStdin cats from stdin
+func CatStdin() []byte {
+  bytes, _ := io.ReadAll(os.Stdin)
+  return bytes
+}
+>>
+
+<</dict-copy
+// DictCopy puts values from the src dict into dest dict, overwriting
+func DictCopy(dst map[string]interface{}, src map[string]interface{}) {
+  <<.>>
+}
+>>
+
+iterate over the dicts per language in src.
+
+<<
+for lang, _ := range src {
+  <<.>>
+}
+>>
+
+if not there, create.
+
+<<
+_, ok := dst[lang]
+if !ok {
+  if lang == "en" {
+    dst[lang] = make(map[string]interface{})
+  } else {
+    dst[lang] = map[string]string{}
+  }
+}
+>>
+
+recursively copy the english-to-other sub-dicts. if non-english-to-other copy the dict entries overwriting the old ones.
+
+<<
+if lang == "en" {
+  DictCopy(dst["en"].(map[string]interface{}), src["en"].(map[string]interface{}))
+} else { 
+  // maps.Copy(dst[lang], src[lang].(map[string]string))
+  for word, tlate := range src[lang].(map[string]interface{}) {
+    dst[lang].(map[string]string)[word] = tlate.(string)
+  }
+}
 >>
 

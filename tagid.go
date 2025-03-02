@@ -16,22 +16,11 @@ func Hello() string {
 
 // main runs Hello.
 func main() {
-  gtdictfile := "gt-scrape-dict.json"
-
-  file, err := os.Open(gtdictfile)
-  if err != nil {
-    fmt.Println(err)
-  }
-  defer file.Close()
-  bytes, _ := io.ReadAll(file)
-
-  var dict map[string]interface{}
-  json.Unmarshal([]byte(bytes), &dict)
-  bytes, _ = io.ReadAll(os.Stdin)
   langa := os.Args[1]
-  fmt.Println(Tagid(string(bytes), langa, dict))
-  //fmt.Println(dict["de"].(map[string]interface{})["hallo"])
-
+  dict := make(map[string]interface{})
+  json.Unmarshal(Cat("/home/max/zebra/out/lingo-dict-" + langa + ".json"), &dict)
+  fmt.Println(Tagid(string(CatStdin()), langa, dict))
+  
 
 }
 
@@ -63,6 +52,8 @@ func Tagid(text string, langa string, dict map[string]interface{}) string {
 func WordsAndBetween(s string)[]string {
   re := regexp.MustCompile(`[\p{L}\p{M}]+'?[\p{L}\p{M}]+`)
   return SplitKeepSep(re, s)
+
+
 }
 
 
@@ -97,6 +88,54 @@ func SplitKeepSep(re *regexp.Regexp, s string) []string {
     out = append(out, s[start:len(s)-1])
   }
   return out
+  
+
+}
+
+
+
+// Cat returns the contents of a file as byte array
+func Cat(path string) []byte {
+  file, err := os.Open(path)
+  if err != nil {
+    fmt.Println(err)
+  }
+  defer file.Close()
+
+  bytes, _ := io.ReadAll(file)
+
+  return bytes
+}
+
+// CatStdin cats from stdin
+func CatStdin() []byte {
+  bytes, _ := io.ReadAll(os.Stdin)
+  return bytes
+}
+
+
+// DictCopy puts values from the src dict into dest dict, overwriting
+func DictCopy(dst map[string]interface{}, src map[string]interface{}) {
+  for lang, _ := range src {
+    _, ok := dst[lang]
+    if !ok {
+      if lang == "en" {
+        dst[lang] = make(map[string]interface{})
+      } else {
+        dst[lang] = map[string]string{}
+      }
+    }
+    if lang == "en" {
+      DictCopy(dst["en"].(map[string]interface{}), src["en"].(map[string]interface{}))
+    } else { 
+      // maps.Copy(dst[lang], src[lang].(map[string]string))
+      for word, tlate := range src[lang].(map[string]interface{}) {
+        dst[lang].(map[string]string)[word] = tlate.(string)
+      }
+    }
+    
+
+  }
   
 
 }
