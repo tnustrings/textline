@@ -1,0 +1,32 @@
+# tagid
+
+<<//tagid.go
+package main
+
+<<import>>
+<<hello>>
+<<main>>
+>>
+
+hello returns a greeting.
+
+<</hello
+func Hello() string {
+  message := fmt.Sprintf("hi")
+  return message
+}
+>>
+
+import fmt.
+
+<</import
+import "fmt"
+>>
+
+<</main
+// main runs Hello.
+func main() {
+  fmt.Println(Hello())
+}
+>>
+
