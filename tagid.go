@@ -18,7 +18,7 @@ func Hello() string {
 func main() {
   langa := os.Args[1]
   dict := make(map[string]interface{})
-  json.Unmarshal(Cat("/home/max/zebra/out/lingo-dict-" + langa + ".json"), &dict)
+  json.Unmarshal(Cat("dict/lingo-dict-" + langa + ".json"), &dict)
   fmt.Println(Tagid(string(CatStdin()), langa, dict))
   
 

@@ -48,7 +48,7 @@ read the dict for the lang.
 
 <<
 dict := make(map[string]interface{})
-json.Unmarshal(Cat("/home/max/zebra/out/lingo-dict-" + langa + ".json"), &dict)
+json.Unmarshal(Cat("dict/lingo-dict-" + langa + ".json"), &dict)
 >>
 
 output the text with word by word translations.
