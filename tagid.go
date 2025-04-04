@@ -8,19 +8,13 @@ import "io"
 import "regexp"
 import "strings"
 
-
-
 //go:embed dict/*
 var dictfolder embed.FS
-
-
 
 func Hello() string {
   message := fmt.Sprintf("hi")
   return message
 }
-
-
 // main runs Hello.
 func main() {
   langa := os.Args[1]
@@ -28,11 +22,7 @@ func main() {
   content, _ := dictfolder.ReadFile("dict/lingo-dict-" + langa + ".json")
   json.Unmarshal(content, &dict)
   fmt.Println(Tagid(string(CatStdin()), langa, dict))
-  
-
 }
-
-
 // Tagid puts word-by-word translations into text
 func Tagid(text string, langa string, dict map[string]interface{}) string {
   wab := WordsAndBetween(text)
@@ -46,25 +36,15 @@ func Tagid(text string, langa string, dict map[string]interface{}) string {
       insert = Lookup(dict, langa, w)
       out += w
       out += " [[" + insert + "]]"
-      
-
     }
   }
   return out
-
-
 }
-
-
 // WordsAndBetween splits the text into words and non-words
 func WordsAndBetween(s string)[]string {
   re := regexp.MustCompile(`[\p{L}\p{M}]+'?[\p{L}\p{M}]+`)
   return SplitKeepSep(re, s)
-
-
 }
-
-
 // Lookup looks up a word in dict
 func Lookup(dict map[string]interface{}, lang string, word string) string {
   word = strings.ToLower(word)
@@ -76,11 +56,7 @@ func Lookup(dict map[string]interface{}, lang string, word string) string {
   if !ok { return "" }
 
   return val.(string)
-
-
 }
-
-
 
 func SplitKeepSep(re *regexp.Regexp, s string) []string {
   matches := re.FindAllStringIndex(s, -1)
@@ -96,11 +72,7 @@ func SplitKeepSep(re *regexp.Regexp, s string) []string {
     out = append(out, s[start:len(s)-1])
   }
   return out
-  
-
 }
-
-
 
 // Cat returns the contents of a file as byte array
 func Cat(path string) []byte {
@@ -120,8 +92,6 @@ func CatStdin() []byte {
   bytes, _ := io.ReadAll(os.Stdin)
   return bytes
 }
-
-
 // DictCopy puts values from the src dict into dest dict, overwriting
 func DictCopy(dst map[string]interface{}, src map[string]interface{}) {
   for lang, _ := range src {
@@ -141,12 +111,5 @@ func DictCopy(dst map[string]interface{}, src map[string]interface{}) {
         dst[lang].(map[string]string)[word] = tlate.(string)
       }
     }
-    
-
   }
-  
-
 }
-
-
-
