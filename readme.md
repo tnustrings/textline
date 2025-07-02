@@ -9,22 +9,23 @@ Dzień [[day]] dobry [[good]]
 
 ## install and try
 
-## on linux install with apt
+**on linux with apt**
 
-download the [latest
-release](https://github.com/tnustrings/lily/releases), then say
+download the [lily-<version>.deb](https://github.com/tnustrings/lily/releases), then say
 
 ```
 sudo apt install ./lily-<version>.deb
 ```
 
-## anywhere install with go
+**on any os with go**
 
 ```
 go install github.com/tnustrings/lily
 ```
 
-try feeding in some text:
+**try**
+
+try feeding it some text:
 
 ```
 echo "Dzień dobry" | lily pl
