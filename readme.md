@@ -9,6 +9,16 @@ Dzień [[day]] dobry [[good]]
 
 ## install and try
 
+## on linux install with apt
+
+download the [latest release](releases/), then say
+
+```
+sudo apt install ./lily-<version>.deb
+```
+
+## anywhere install with go
+
 ```
 go install github.com/tnustrings/lily
 ```
