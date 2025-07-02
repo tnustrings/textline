@@ -11,7 +11,8 @@ Dzień [[day]] dobry [[good]]
 
 ## on linux install with apt
 
-download the [latest release](releases/), then say
+download the [latest
+release](https://github.com/tnustrings/lily/releases), then say
 
 ```
 sudo apt install ./lily-<version>.deb
