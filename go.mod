@@ -1,3 +1,3 @@
-module github.com/tnustrings/tagid
+module github.com/tnustrings/lily
 
 go 1.23.4
