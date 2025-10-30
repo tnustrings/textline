@@ -1,0 +1,368 @@
+# textline
+
+the structure of the program.
+
+``//textline.go: #go
+package main
+
+``import``
+
+
+``embed``
+
+``hello``
+``main``
+``textline``
+``words-and-between``
+``lookup``
+
+``split-keep``
+``isword``
+
+``cat``
+``dict-copy``
+``
+
+hello returns a greeting.
+
+``/hello: #go
+func Hello() string {
+  message := fmt.Sprintf("hi")
+  return message
+}
+``
+
+import fmt.
+
+``/import: #go
+import "fmt"
+``
+
+embed the json dict files in the binary.
+
+``/embed: #go
+//go:embed dict/*
+var dictfolder embed.FS
+``
+
+``/import #go
+import "embed"
+``
+
+``/main: #go
+// main runs Hello.
+func main() {
+  ``.``
+}
+``
+
+for now, the first argument could be a command or lang a.
+
+if it's not a command, we assume it's lang a.
+
+``
+if os.Args[1] == "words" {
+  ``words``
+} else {
+  ``std``
+}
+``
+
+# words
+
+get the words and what's in between.
+
+``./words: #go
+  wnb := WordsAndBetween(string(CatStdin()))
+``
+
+print the words, ignore the between-strings.
+
+`` #go
+  for _, w := range wnb {
+    if IsWord(w) {
+      fmt.Println(w)
+    }
+  }
+``
+
+# std
+
+set the lang.
+
+``../std: #go
+langa := os.Args[1]
+``
+
+read the dict for the lang.
+
+`` #go
+dict := make(map[string]interface{})
+content, _ := dictfolder.ReadFile("dict/lingo-dict-" + langa + ".json")
+json.Unmarshal(content, &dict)
+``
+
+output the text with word by word translations.
+
+`` #go
+fmt.Println(Textline(string(CatStdin()), langa, dict))
+``
+
+do the imports.
+
+``/import #go
+import "os"
+import "encoding/json"
+import "io"
+``
+
+## textline
+
+``/textline: #go
+// Textline puts word-by-word translations into text
+func Textline(text string, langa string, dict map[string]interface{}) string {
+  ``.``
+}
+``
+
+get the words and what's in between.
+
+`` #go
+  wab := WordsAndBetween(text)
+``
+
+iterate the words and between-strings, if it's a non-word, append.
+
+`` #go
+  out := ""
+  hasLetter := regexp.MustCompile(`\p{L}`)
+  for _, w := range wab {
+    if !hasLetter.MatchString(w) {
+      out += w
+    } else {
+      ``.``
+    }
+  }
+  return out
+``
+
+it seems to be a word, look it up.
+
+`` #go
+insert := ""
+insert = Lookup(dict, langa, w)
+``
+
+first append the word, then the looked up insert.  empty insert
+strings are ok, so that formatting is consistent.
+
+`` #go
+out += w
+out += " [[" + insert + "]]"
+``
+
+``/import #go
+import "regexp"
+``
+
+## lookup
+
+``/lookup: #go
+// Lookup looks up a word in dict
+func Lookup(dict map[string]interface{}, lang string, word string) string {
+  ``.``
+}
+``
+
+lower the string.
+
+`` #go
+  word = strings.ToLower(word)
+``
+
+check if the dict for the language is there.
+
+apparently the standard behaviour for 'not found' is not to return nil
+but to return empty strings: https://go.dev/doc/tutorial/handle-errors
+
+`` #go
+  val, ok := dict[lang]
+  // no dict for lang
+  if !ok { return "" }
+``
+
+look up the word
+
+`` #go
+  val, ok = dict[lang].(map[string]interface{})[word]
+  // word not in dict
+  if !ok { return "" }
+
+  return val.(string)
+``
+
+``/import #go
+import "strings"
+``
+
+## words and between
+
+``/words-and-between: #go
+// WordsAndBetween splits the text into words and non-words
+func WordsAndBetween(s string)[]string {
+  ``.``
+}
+``
+
+the intuitive way would be to split along the non-letters between
+words: [^\p{L}\p{M}]+
+
+however, this would split up words containing apostrophes like "don't"
+into "don", "'", "t".  we don't want this.
+
+so we split along the words, that means, groups of letters possibly
+containing an apostrophe, but not beginnig or ending with one:
+[\p{L}\p{M}]+'?[\p{L}\p{M}]
+
+`` #go
+  re := regexp.MustCompile(`[\p{L}\p{M}]+'?[\p{L}\p{M}]+`)
+  return SplitKeepSep(re, s)
+``
+
+split with keeping the delimiter.
+
+``/split-keep: #go
+func SplitKeepSep(re *regexp.Regexp, s string) []string {
+  ``.``
+}
+``
+
+get the match indices.
+
+`` #go
+matches := re.FindAllStringIndex(s, -1)
+``
+
+append the string leading up to the next match and then the match.
+
+`` #go
+var out []string
+start := 0
+for _, match := range matches {
+  out = append(out, s[start:match[0]])
+  out = append(out, s[match[0]:match[1]])
+  // the next starts after match
+  start = match[1]
+}
+``
+
+append the string from the last match till the end and return.
+
+`` #go
+if start < len(s) {
+  out = append(out, s[start:len(s)-1])
+}
+return out
+``
+
+# isword
+
+IsWord filters out strings that don't contain letters or strings that
+contain any non-word character except dash, apostrophe, or persian
+half-blank.
+
+the persian half-blank character, u+200c, also called ZWNJ (zero-width
+non joiner), is for example in می‌کنن mikonan 'they do'. accept it as
+part of a word.
+ 
+
+``/isword:
+func IsWord(s string)bool {
+    ``.``
+}
+``
+
+if the string doesn't contain a letter or it matches any non-word
+character except dash, apostrophe and persian half-space \u200c say
+it's not a word.
+
+``
+    // pre-compile these regexes once?
+    reLetter := regexp.MustCompile(`\p{L}`)
+    reNonLetterExcept := regexp.MustCompile(`[^\p{L}\p{M}\-'\x{200C}]`)
+
+    if (!reLetter.MatchString(s) || reNonLetterExcept.MatchString(s)) {
+	return false
+    }
+    return true
+``
+
+
+## helper functions
+
+``/cat: #go
+// Cat returns the contents of a file as byte array
+func Cat(path string) []byte {
+  file, err := os.Open(path)
+  if err != nil {
+    fmt.Println(err)
+  }
+  defer file.Close()
+
+  bytes, _ := io.ReadAll(file)
+
+  return bytes
+}
+
+// CatStdin cats from stdin
+func CatStdin() []byte {
+  bytes, _ := io.ReadAll(os.Stdin)
+  return bytes
+}
+``
+
+``/dict-copy: #go
+// DictCopy puts values from the src dict into dest dict, overwriting
+func DictCopy(dst map[string]interface{}, src map[string]interface{}) {
+  ``.``
+}
+``
+
+iterate over the dicts per language in src.
+
+`` #go
+for lang, _ := range src {
+  ``.``
+}
+``
+
+if not there, create.
+
+`` #go
+_, ok := dst[lang]
+if !ok {
+  if lang == "en" {
+    dst[lang] = make(map[string]interface{})
+  } else {
+    dst[lang] = map[string]string{}
+  }
+}
+``
+
+recursively copy the english-to-other sub-dicts. if
+non-english-to-other copy the dict entries overwriting the old ones.
+
+`` #go
+if lang == "en" {
+  DictCopy(dst["en"].(map[string]interface{}), src["en"].(map[string]interface{}))
+} else { 
+  // maps.Copy(dst[lang], src[lang].(map[string]string))
+  for word, tlate := range src[lang].(map[string]interface{}) {
+    dst[lang].(map[string]string)[word] = tlate.(string)
+  }
+}
+``
+
+
+
+make text bold like here? https://www.reddit.com/r/golang/comments/tjnyfs/simple_cli_colorizing_in_go/
