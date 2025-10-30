@@ -17223,8 +17223,8 @@
   "iżeście": "that you",
   "iżeśmy": "that we",
   "j": "j",
-  "j.'a": "i",
-  "j.'em": "j.'em",
+  "j.'a": "equal",
+  "j.'em": "affecting",
   "ja": "i",
   "jaan": "jaan",
   "jaara": "jaara",
@@ -91888,7 +91888,6 @@
   "inwazyjność": "invasiveness",
   "inwestowania": "investing",
   "inwestycjom": "investments",
-  "in·te·grat·ed": "of an institution",
   "inżynierskimi": "engineering",
   "irini": "irmini",
   "istniejące": "existing",
@@ -93450,7 +93449,6 @@
   "portach": "ports",
   "portalami": "portals",
   "portali": "portals",
-  "por·tal": "a doorway",
   "porównywania": "comparison",
   "posadę": "job",
   "posesję": "property",
@@ -96045,6 +96043,8 @@
   "گندم": "گند tom",
   "یهودای": "یهheticدای",
   "dohte": "thesehto",
-  "teohrie": "theohries"
+  "teohrie": "theohries",
+  "in·te·grat·ed": "of an institution",
+  "por·tal": "a doorway"
  }
 }

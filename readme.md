@@ -1,9 +1,9 @@
-# lily
+# textline
 
 languages word by word in go
 
 ```
-$ echo "Dzień dobry" | lily pl
+$ echo "Dzień dobry" | textline pl
 Dzień [[day]] dobry [[good]]
 ```
 
@@ -11,16 +11,16 @@ Dzień [[day]] dobry [[good]]
 
 **on linux with apt**
 
-download the [lily-\<version\>.deb](https://github.com/tnustrings/lily/releases), then say
+download the [textline-\<version\>.deb](https://github.com/tnustrings/textline/releases), then say
 
 ```
-sudo apt install ./lily-<version>.deb
+sudo apt install ./textline-<version>.deb
 ```
 
 **on any os with go**
 
 ```
-go install github.com/tnustrings/lily
+go install github.com/tnustrings/textline
 ```
 
 **try**
@@ -28,21 +28,21 @@ go install github.com/tnustrings/lily
 try feeding it some text:
 
 ```
-echo "Dzień dobry" | lily pl
+echo "Dzień dobry" | textline pl
 ```
 
-there's also a lily [browser
+there's also a textline [browser
 extension](https://chromewebstore.google.com/detail/tagid-with-google-dict/aacfmkdpcdadjcpohbjfcddomedmfdai).
 
 ## code
 
 the code is written in codetext, install from
-[here](https://github.com/tnustrings/codetext).
+[here](https://github.com/tnustrings/ct).
 
 then say:
 
 ```
-ct lily.ct
+ct textline.ct
 ```
 
 to generate the go code.

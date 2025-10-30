@@ -11073,7 +11073,7 @@
   "deïforme": "deiform",
   "deïtade": "deity",
   "deïtà": "deity",
-  "di": "drill instructor",
+  "di": "of",
   "dia": "give",
   "diabete": "diabetes",
   "diabolica": "diabolic",
@@ -59486,7 +59486,6 @@
   "gioiosa": "joyful",
   "shakalu": "shakalu",
   "volate": "fly",
-  "be'...lui": "well...him",
   "bottigliata": "bottled",
   "firmerei": "i would sign",
   "politicamente": "politically",
@@ -71039,7 +71038,6 @@
   "lontananza": "distance",
   "lordo": "gross",
   "lottava": "fought",
-  "lunga.\n": "long",
   "lunghissimo": "very long",
   "lussuose": "luxurious",
   "lutti": "mourning",
@@ -71733,7 +71731,6 @@
   "succedere": "happen",
   "successivamente": "subsequently",
   "successivi": "subsequent",
-  "successivi.\n": "subsequent",
   "sudamericane": "south american",
   "suddivisi": "divided",
   "suddivisione": "partition",
@@ -71930,6 +71927,8 @@
   "zanzara": "mosquito",
   "ה-cia": "ה",
   "allahi": "allahs",
-  "teohrie": "theohries"
+  "teohrie": "theohries",
+  "lunga.\n": "long",
+  "successivi.\n": "subsequent"
  }
 }

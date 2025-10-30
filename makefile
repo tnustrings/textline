@@ -1,8 +1,8 @@
-all: bin/lily
+all: bin/textline
 
-bin/lily: lily.ct
-	ct lily.ct
-	go build -o bin/lily
+bin/textline: textline.ct
+	ct textline.ct
+	go build -o bin/textline
 
 .PHONY deb:
 	cd deb; make
