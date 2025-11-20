@@ -1,8 +1,8 @@
-all: bin/textline
+all: bin/lingobin
 
-bin/textline: textline.ct
-	ct textline.ct
-	go build -o bin/textline
+bin/lingobin: lingobin.ct
+	ct lingobin.ct
+	go build -o bin/lingobin
 
 .PHONY deb:
 	cd deb; make
